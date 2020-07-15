@@ -3,7 +3,7 @@ import { LoginBox } from '../style';
 import 'antd/dist/antd.css';
 import { message } from 'antd';
 import { Input, Button, ErrorInfo, AffixWrapper } from '../style';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -11,7 +11,10 @@ import * as Yup from 'yup';
 
 const LoginForm1 = () => {
 
+	const location = useLocation();
 	const history = useHistory();
+
+	const {from} = location.state || {from: {pathname: '/'}};
 
 	const formik = useFormik ({
 
@@ -30,25 +33,45 @@ const LoginForm1 = () => {
 
 		/* 表单提交 */
 		onSubmit: values => {
-			history.push('/admin');
+			//history.replace(from.pathname);
+			console.log(values);
 			axios({
 				method: 'post',
-				url: '/user/12345',
-				//JSON
-				headers: {'Content-Type': 'application/json;charset=utf-8'},
-				data: JSON.stringify(values)
-			}).then(
-				res => {
-					//Token处理
-					const {token} = res.data;
-					localStorage.setItem('Token', token); 
+				url: '/gyq/users/login',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data: {
+					userName: values.username,
+					password: values.password
 				}
-			).catch(
-				err => {
-					console.log(err);
-					message.error("登录失败，请检查用户名和密码是否正确", 1, )
+			}).then((res) => {
+				const token = (Date.now() + 10000000);
+				axios.defaults.headers.common['Authorization'] = token;
+				localStorage.setItem('Token', token); 
+				history.replace(from.pathname);
+			}).catch(
+				(e) => {
+					console.log(e);
+					message.warn("用户名或密码错误，请重试", 1);
 				}
-			)
+			);
+			// axios({
+			// 	method: 'post',
+			// 	url: '/user/12345',
+			// 	//JSON
+			// 	headers: {'Content-Type': 'application/json;charset=utf-8'},
+			// 	data: JSON.stringify(values)
+			// }).then(
+			// 	res => {
+			// 		//Token处理
+			// 		const {token} = res.data;
+			// 		localStorage.setItem('Token', token); 
+			// 	}
+			// ).catch(
+			// 	err => {
+			// 		console.log(err);
+			// 		message.error("登录失败，请检查用户名和密码是否正确", 1, )
+			// 	}
+			// )
 		}
 	});
 

@@ -2,7 +2,10 @@ import React from 'react';
 import { LoginBody, TopBar } from './style';
 import LoginForm from './components/LoginForm';
 
-const Login = () => {
+const Login = (props) => {
+
+	console.log(props.history);
+
 	return(
 		<LoginBody>
 			<TopBar>
@@ -13,6 +16,7 @@ const Login = () => {
 			<LoginForm />
 		</LoginBody>
 	);
+	
 }
 
 export default Login;

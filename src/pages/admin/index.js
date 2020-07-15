@@ -1,25 +1,29 @@
 import React, { lazy, Suspense } from 'react';
 import { Layout, Menu, Spin } from 'antd';
 import { Body } from './style';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, withRouter } from 'react-router-dom';
 import { CSSLink, Loading } from '../../style';
 import { createFromIconfontCN } from '@ant-design/icons';
 
-/* 后台管理的整体布局和路由配置 */
+/* 后台管理的整体布局和路由 */
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const Home = lazy(() => import('./pages/home'));
 const Report = lazy(() => import('./pages/report'));
 const Manage = lazy(() => import('./pages/manage'));
-
 const IconFont = createFromIconfontCN({
   scriptUrl: CSSLink.iconfont,
 });
 
 const Admin = (props) => {
 
-	console.log(props);
+	const handleLogout = () => {
+		localStorage.removeItem("Token");
+		props.history.push('/login');
+	}
+
+	console.log(props.match);
 
 	return (
 		<Body>
@@ -35,14 +39,14 @@ const Admin = (props) => {
 				>
 				<div className="logo">树洞管理后台</div>
 				<Menu theme="dark" mode="inline" defaultSelectedKeys={[props.location.pathname]}>
-					<Menu.Item key="/admin" icon={<IconFont type="iconshouye" style={{fontSize:"19px"}}/>}>
-						<Link to='/admin'>系统首页</Link>
+					<Menu.Item key="/" icon={<IconFont type="iconshouye" style={{fontSize:"19px"}}/>}>
+						<Link to='/'>系统首页</Link>
 					</Menu.Item>
-					<Menu.Item key="/admin/report" icon={<IconFont type="iconjubao" style={{fontSize:"19px"}}/>}>
-						<Link to='/admin/report'>举报管理</Link>
+					<Menu.Item key="/report" icon={<IconFont type="iconjubao" style={{fontSize:"19px"}}/>}>
+						<Link to='/report'>举报管理</Link>
 					</Menu.Item>
-					<Menu.Item key='/admin/manage' icon={<IconFont type="iconyunyingguanli" style={{fontSize:"19px"}}/>}>
-						<Link to='/admin/manage'>虚拟用户管理</Link>
+					<Menu.Item key='/manage' icon={<IconFont type="iconyunyingguanli" style={{fontSize:"19px"}}/>}>
+						<Link to='/manage'>虚拟用户管理</Link>
 					</Menu.Item>
 				</Menu>
 				</Sider>
@@ -51,14 +55,16 @@ const Admin = (props) => {
 						<div className="welcome">
 							欢迎您！<br/>超级管理员
 						</div>
-						<div className="logout">退出</div>
+						<div className="logout" onClick={handleLogout}>退出</div>
 					</Header>
 
 					<Content style={{ margin: '24px 25px 0', overflow: 'initial' }}>
 						<Suspense fallback={<Loading><Spin size="large" /></Loading>}>
-							<Route path="/admin" exact component={ Home }/>
-							<Route path="/admin/report" component={ Report }/>
-							<Route path="/admin/manage" component={ Manage }/>
+
+							<Route path="/" exact component={ Home }/>
+							<Route path="/report" component={ Report }/>
+							<Route path="/manage" component={ Manage }/>
+
 						</Suspense>
 					</Content>
 					
@@ -69,4 +75,4 @@ const Admin = (props) => {
 	)
 }
 
-export default Admin;
+export default withRouter(Admin);
