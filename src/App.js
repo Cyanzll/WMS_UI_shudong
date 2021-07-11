@@ -4,6 +4,7 @@ import { Loading } from './style';
 import { Spin } from 'antd';
 /* 懒加载 */
 const Login = lazy(() => import('./pages/login'));
+const Register = lazy(() => import('./pages/register'));
 const Admin = lazy(() => import('./pages/admin'));
 
 /* 路由鉴权 */
@@ -24,6 +25,7 @@ function App() {
       <Suspense fallback={<Loading> <Spin size="large" /> </Loading>}>
         <Switch>
           <Route path="/login" component={Login}/>
+          <Route path="/register" component={Register}/>
           <AuthRoute path="/">
             <Admin />
           </AuthRoute>

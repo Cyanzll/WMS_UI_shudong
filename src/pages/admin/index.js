@@ -68,7 +68,7 @@ const Admin = (props) => {
 						</Suspense>
 					</Content>
 					
-					<Footer style={{ textAlign: 'center' }}>树洞管理后台 为之工作室 2020</Footer>
+					<Footer style={{ textAlign: 'center' }}>树洞管理后台 @LulinZhang 2020</Footer>
 				</Layout>
 			</Layout>
 	  </Body>

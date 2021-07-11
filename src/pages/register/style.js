@@ -24,7 +24,7 @@ export const LoginBody = styled.div`
 	}
 
 	.welcome {
-		font-size: 56px;
+		font-size: 72px;
 		color: white;
 		margin-top: 29px;
 	}
@@ -47,7 +47,7 @@ export const TopBar = styled.div`
         text-align: left;
         font-family: SourceHanSansSC-regular;
     }
-	.register {
+	.login {
 		color: rgba(255, 255, 255, 1);
 		transition: all 50ms ease-in;
         font-size: 16px;
@@ -66,18 +66,83 @@ export const TopBar = styled.div`
 
 /* 登录盒子 */
 export const LoginBox = styled.div`
-	margin-top: 11px;
-	width: 600px;
-	height: 300px;
+	margin-top: 30px;
+	min-width: 600px;
+	min-height: 300px;
 	border-radius: 10px;
 	background-color: rgba(255, 255, 255, 1);
 	color: rgba(16, 16, 16, 1);
 	box-shadow: 2px 3px 22px 8px rgba(0, 21, 41, 0.14);
 	display: flex;
+	padding: 25px 0 50px 0;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding-top: 20px;
+	.title {
+		font-size: 24px;
+		width: 100%;
+		line-height: 48px;
+		text-align: center;
+		margin-bottom: 20px;
+		color: rgba(0, 0, 0, 0.5);
+	}
+	.ant-form-horizontal {
+		padding-right: 50px;
+	}
+	.ant-input-affix-wrapper {
+		padding: 0;
+		padding-right: 20px;
+		background-color: rgba(221, 223, 255, 0.41);
+		input {
+			height: 36px !important;
+			padding: 2px 5px;
+		}
+	}
+	.ant-form-item-label {
+		width: 60px !important;
+	}
+	.ant-col-sm-8 {
+		width: 60px !important;
+	}
+	input {
+		border-radius: 5px;
+		padding: 2px 10px;
+		background-color: #f0f2ff;
+		color: rgba(16, 16, 16, 1);
+		font-size: 14px;
+		height: 36px;
+		border: 1px solid #d9d9d9;
+		transition: all 100ms ease-in;
+		&:focus {
+			background-color: rgba(221, 223, 255, 0.3);
+			border: 1px solid #6495ED;
+		}
+		&::placeholder {
+			color: rgba(187, 187, 187, 0.94);
+		}
+	}
+	.ant-btn-primary {
+		margin-top: 5px;
+		width: 80%;
+		height: 40px;
+		line-height: 24px;
+		border-radius: 5px;
+		background-color: rgba(38, 120, 244, 0.79);
+		font-size: 16px;
+		color: white;
+		text-align: center;
+		font-family: Roboto;
+		outline: none;
+		border: none;
+		cursor: pointer;
+		transition: all 100ms ease-in;
+		&:hover {
+			background: #40a9ff
+		}
+		&:active {
+			background: #096dd9;
+		}
+	}
 `;
 
 export const Input = styled.input`

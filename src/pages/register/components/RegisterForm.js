@@ -8,9 +8,9 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-// 使用了Formik配合Yup完成输入验证
+// 注册表单
 
-const LoginForm = () => {
+const RegisterForm = () => {
 
 	const location = useLocation();
 	const history = useHistory();
@@ -22,7 +22,8 @@ const LoginForm = () => {
 
 		initialValues: {
 			username: '',
-			password: ''
+			password: '',
+			email: ''
 		},
 
 		/* Yup验证策略 */
@@ -38,7 +39,7 @@ const LoginForm = () => {
 			history.replace(from.pathname);
 			axios({
 				method: 'get',
-				url: 'http://localhost:8080/api/login',
+				url: 'http://localhost:8080/api/register',
 				params: {
 					username: values.username,
 					password: values.password
@@ -75,20 +76,40 @@ const LoginForm = () => {
 
 	return (
 		<LoginBox>
+			<h1 className="title">注册 | Register</h1>
 			<form onSubmit={formik.handleSubmit}>
+
+				{/* 用户名 */ }
 				<AffixWrapper>
 					<div className="unicon"></div>
 					<Input
 						name="username"
-						placeholder="请输入账号"
+						placeholder="请输入用户名"
 						type="text"
 						{...formik.getFieldProps('username')}
 					/>
 				</AffixWrapper>
+
 				<ErrorInfo>
 				{formik.touched.username && formik.errors.username ? <div>{formik.errors.username}</div> : null }
 				</ErrorInfo>
 
+				{/* 邮箱 */ }
+				<AffixWrapper>
+					<div className="pwdicon"></div>
+					<Input
+						name="password"
+						placeholder="请输入邮箱"
+						type="password"
+						{...formik.getFieldProps('password')}
+					/>
+				</AffixWrapper>
+
+				<ErrorInfo>
+				{formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null }
+				</ErrorInfo>
+
+				{/* 密码 */ }
 				<AffixWrapper>
 					<div className="pwdicon"></div>
 					<Input
@@ -98,13 +119,31 @@ const LoginForm = () => {
 						{...formik.getFieldProps('password')}
 					/>
 				</AffixWrapper>
+
 				<ErrorInfo>
 				{formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null }
 				</ErrorInfo>
-				<Button type="suBmit">登录</Button>
+
+				{/* 确认密码 */ }
+				<AffixWrapper>
+					<div className="pwdicon"></div>
+					<Input
+						name="password"
+						placeholder="确认密码"
+						type="password"
+						{...formik.getFieldProps('password')}
+					/>
+				</AffixWrapper>
+
+				<ErrorInfo>
+				{formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null }
+				</ErrorInfo>
+
+				{/* 提交 */ }
+				<Button type="suBmit">注册</Button>
 		</form>
 		</LoginBox>
 	);
 }
 
-export default LoginForm;
+export default RegisterForm;
