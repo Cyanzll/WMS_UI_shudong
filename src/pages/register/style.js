@@ -143,6 +143,9 @@ export const LoginBox = styled.div`
 			background: #096dd9;
 		}
 	}
+	.authmessage {
+		width: 100px;
+	}
 `;
 
 export const Input = styled.input`
