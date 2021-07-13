@@ -1,8 +1,8 @@
 import React from 'react';
 import { LoginBody, TopBar } from './style';
-import RegistrationForm from './components/RegistrationForm';
+import ForgetForm from './components/ForgetForm';
 
-const Register = (props) => {
+const Reset = (props) => {
 
 	console.log(props.history);
 
@@ -13,13 +13,13 @@ const Register = (props) => {
 	return(
 		<LoginBody>
 			<TopBar>
-				<h1 className="title">学生服务系统 - 注册</h1>
+				<h1 className="title">学生服务系统 - 密码重置</h1>
 				<div className="login" onClick={handleLogout}>登录</div>
 			</TopBar>
-			<RegistrationForm />
+			<ForgetForm />
 		</LoginBody>
 	);
 	
 }
 
-export default Register;
+export default Reset;

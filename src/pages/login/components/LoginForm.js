@@ -7,6 +7,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import CryptoJs from 'crypto-js' // MD5加密模块
 
 // 使用了Formik配合Yup完成输入验证
 
@@ -38,10 +39,10 @@ const LoginForm = () => {
 			history.replace(from.pathname);
 			axios({
 				method: 'get',
-				url: 'http://localhost:8080/api/login',
+				url: 'http://120.24.39.199:8080/api/login',
 				params: {
 					username: values.username,
-					password: values.password
+					password: CryptoJs.MD5(values.password).toString()
 				}
 			}).then((res) => {
 				switch(res.data) {
