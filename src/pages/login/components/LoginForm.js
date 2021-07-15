@@ -34,7 +34,7 @@ const LoginForm = () => {
 			.required("密码不得为空")
 		}),
 
-		/* 表单提交动作 */
+		/* 登录 - #axios */
 		onSubmit: values => {
 			history.replace(from.pathname);
 			axios({
@@ -44,31 +44,26 @@ const LoginForm = () => {
 					username: values.username,
 					password: CryptoJs.MD5(values.password).toString()
 				}
-			}).then((res) => {
-				switch(res.data) {
-					case "success": {
-						const token = (Date.now() + 10000000);
-						axios.defaults.headers.common['Authorization'] = token;
-						localStorage.setItem('Token', token); 
-						history.replace(from.pathname);
-						break;
-					}
-					case "password error": {
-						message.warn("密码错误，请重试", 1);
-						break;
-					}
-					case "unknown username": {
-						message.warn("该用户名不存在", 1);
-						break;
-					}
-					default: {
-						message.warn("请联系管理员", 1);
-					}
-				}
+			}).then(() => {
+				const token = (Date.now() + 10000000);
+				axios.defaults.headers.common['Authorization'] = token;
+				localStorage.setItem('Token', token); 
+				history.replace(from.pathname);
 			}).catch(
 				(e) => {
-					console.log(e);
-					message.warn("用户名或密码错误，请重试", 1);
+					switch(e.response.data.message) {
+						case "password error": {
+							message.warn("密码错误，请重试", 1);
+							break;
+						}
+						case "username not exist": {
+							message.warn("该用户名不存在", 1);
+							break;
+						}
+						default: {
+							message.warn("请联系管理员", 1);
+						}
+					}
 				}
 			);
 		}

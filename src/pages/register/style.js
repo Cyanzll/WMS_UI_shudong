@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Bg from '../../static/bg.png';
+import Bg from '../../static/bg.jpg';
 import uname from '../../static/un.png';
 import pwd from '../../static/pwd.png';
 import Logo from '../../static/logo.png';

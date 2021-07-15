@@ -50,46 +50,37 @@ const RegistrationForm = () => {
   const params = location.search;
   const username = (params.split('?username='))[1]; // 获取用户名
 
-  // 提交动作 - 邮箱验证
+  // 密码重置 #axios
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
     axios({
       method: 'get',
-      url: 'http://120.24.39.199:8080/api/reset',
+      url: 'http://120.24.39.199:8080/api/reset_password',
       params: {
         username,
         password: CryptoJs.MD5(values.password).toString(),
       }
-    }).then((res) => {
-      switch(res.data) {
-        case "success": {
-          history.replace('/login');
-          message.info("密码重置成功，请重新登录", 2);
-          break;
-        }
-        default: {
-          message.warn("与服务器连接失败，请重试", 2);
-        }
-      }
+    }).then(() => {
+        history.replace('/login');
+        message.info("密码重置成功，请重新登录", 2);
     }).catch(
       (e) => {
-        console.log(e);
-        //message.warn("用户名或密码错误，请重试", 1);
+        message.warn("与服务器连接失败，请重试", 2);
       }
     );
   };
 
-  // 发送验证码
+  // 发送验证码 #axios
   const sendAuthMessage = () => {
     message.info("验证码邮件已发送至邮箱，请注意查收", 2);
     axios({
       method: 'get',
-      url: 'http://120.24.39.199:8080/api/email_reset',
+      url: 'http://120.24.39.199:8080/api/email_auth_code_reg_reset_password',
       params: {
         username
       }
     }).then((res) => {
-      setAuthCode(res.data + "")
+      setAuthCode(res.data.message + "")
     }) 
     const WAIT_TIME = 30;
     const MS = 1000;
@@ -165,55 +156,6 @@ const RegistrationForm = () => {
         >
           <Input.Password />
         </Form.Item>
-
-
-
-{/*         <Form.Item
-          name="residence"
-          label="Habitual Residence"
-          rules={[
-            {
-              type: 'array',
-              required: true,
-              message: 'Please select your habitual residence!',
-            },
-          ]}
-        >
-          <Cascader options={residences} />
-        </Form.Item> */}
-
-{/*         <Form.Item
-          name="website"
-          label="Website"
-          rules={[
-            {
-              required: true,
-              message: 'Please input website!',
-            },
-          ]}
-        >
-          <AutoComplete options={websiteOptions} onChange={onWebsiteChange} placeholder="website">
-            <Input />
-          </AutoComplete>
-        </Form.Item> */}
-
-{/*         <Form.Item
-          name="gender"
-          label="性别"
-          rules={[
-            {
-              required: true,
-              message: '请输入你的性别！',
-            },
-          ]}
-        >
-          <Select placeholder="性别">
-            <Option value="male">男</Option>
-            <Option value="female">女</Option>
-            <Option value="other">保密</Option>
-          </Select>
-        </Form.Item> */}
-
 
         <Form.Item 
         label="验证码" 

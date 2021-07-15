@@ -47,53 +47,57 @@ const RegistrationForm = () => {
   const [authCode, setAuthCode] = useState(''); // 验证码
   const [secondShowed, setSecondShowed] = useState("获取验证码");
 	const history = useHistory();
-  // 提交动作
+
+  // 注册 - #axios
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
     axios({
       method: 'get',
-      url: 'http://120.24.39.199:8080/api/reg',
+      url: 'http://120.24.39.199:8080/api/register',
       params: {
         username: values.username,
         password: CryptoJs.MD5(values.password).toString(),
         email: values.email,
         phone: values.phone
       }
-    }).then((res) => {
-      switch(res.data) {
-        case "success": {
-          history.replace('/login');
-          message.info("注册成功，请登录", 2);
-          break;
-        }
-        default: {
-          //message.warn("请联系管理员", 1);
-        }
-      }
+    }).then(() => {
+        history.replace('/login');
+        message.info("注册成功，请登录", 2);
     }).catch(
       (e) => {
-        console.log(e);
-        //message.warn("用户名或密码错误，请重试", 1);
+        switch(e.response.data.message) {
+          case "invalid username": {
+            message.warn("用户名格式不正确，请重试", 1);
+            break;
+          }
+          case "duplicate username": {
+            message.warn("该用户已存在", 1);
+            break;
+          }
+          default: {
+            message.warn("请联系管理员", 1);
+          }
+        }
       }
     );
   };
 
-  // 发送验证码
+  // 发送验证码 - #axios
   const sendAuthMessage = () => {
     let toEmail = form.getFieldValue('email');
-    let pattern = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    let pattern = /^[A-Za-z0-9\u4e00-\u9fa5_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
     if(!pattern.test(toEmail)) {
       message.warn("请输入正确的邮件格式", 1);
       return;
     }
     axios({
       method: 'get',
-      url: 'http://120.24.39.199:8080/api/email',
+      url: 'http://120.24.39.199:8080/api/email_auth_code_reg',
       params: {
         to: toEmail
       }
     }).then((res) => {
-      setAuthCode(res.data + "")
+      setAuthCode(res.data.message + "")
     }) 
     const WAIT_TIME = 30;
     const MS = 1000;
@@ -155,10 +159,10 @@ const RegistrationForm = () => {
               min: 3
             },
             ({ getFieldValue }) => ({
-              // 精髓
+              // 登录框验重 - #axios - 请修改前理解 Promise 对象
               validator(_, value) {
                 let username = getFieldValue('username');
-                // 不符合要求的用户名不参与校验
+                // 不符合格式要求的用户名不参与校验
                 if(typeof(value) != "string" || value.length < 3) {
                   return Promise.reject()
                 }
@@ -172,7 +176,12 @@ const RegistrationForm = () => {
                   }
                 })
                 .then((res) => {
-                  if(res.data === "unknown username") {
+
+                  // 这里返回的不可能是 200，直接走catch
+
+                }).catch((e) => {
+                  console.log(e.response)
+                  if(e.response.data.message === "username not exist") {
                     return
                   } else throw new Error('用户名已存在')
                 })
@@ -189,6 +198,8 @@ const RegistrationForm = () => {
         >
           <Input />
         </Form.Item>
+
+
 
        {/* 密码 */}
         <Form.Item
@@ -224,7 +235,6 @@ const RegistrationForm = () => {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                 }
-                
                 return Promise.reject(new Error('两次输入的密码不一致'));
               },
             })
@@ -235,20 +245,7 @@ const RegistrationForm = () => {
 
 
 
-{/*         <Form.Item
-          name="residence"
-          label="Habitual Residence"
-          rules={[
-            {
-              type: 'array',
-              required: true,
-              message: 'Please select your habitual residence!',
-            },
-          ]}
-        >
-          <Cascader options={residences} />
-        </Form.Item> */}
-
+        {/* 联系方式 */}
         <Form.Item
           name="phone"
           label="联系方式"
@@ -271,37 +268,7 @@ const RegistrationForm = () => {
           />
         </Form.Item>
 
-{/*         <Form.Item
-          name="website"
-          label="Website"
-          rules={[
-            {
-              required: true,
-              message: 'Please input website!',
-            },
-          ]}
-        >
-          <AutoComplete options={websiteOptions} onChange={onWebsiteChange} placeholder="website">
-            <Input />
-          </AutoComplete>
-        </Form.Item> */}
 
-{/*         <Form.Item
-          name="gender"
-          label="性别"
-          rules={[
-            {
-              required: true,
-              message: '请输入你的性别！',
-            },
-          ]}
-        >
-          <Select placeholder="性别">
-            <Option value="male">男</Option>
-            <Option value="female">女</Option>
-            <Option value="other">保密</Option>
-          </Select>
-        </Form.Item> */}
 
         {/* 邮箱 */}
         <Form.Item
@@ -321,6 +288,9 @@ const RegistrationForm = () => {
           <Input />
         </Form.Item>
 
+
+
+        {/* 验证码 */}
         <Form.Item 
         label="验证码" 
         extra="" 

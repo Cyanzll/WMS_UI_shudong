@@ -162,7 +162,7 @@ const withBetterList = (Table, config) => {
 						key: 'username'
 					},
 					{
-						title: '拥抱量',
+						title: '拥抱',
 						align: "center",
 						dataIndex: 'embrace',
 						key: 'embrace',
@@ -264,7 +264,7 @@ const withBetterList = (Table, config) => {
 						width: "8%",
 						key: 'username'
 					}, {
-						title: '感谢量',
+						title: '感谢',
 						align: "center",
 						dataIndex: 'thanks',
 						key: 'thanks',

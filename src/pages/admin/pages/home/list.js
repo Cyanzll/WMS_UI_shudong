@@ -248,7 +248,7 @@ class List extends React.Component {
 				key: 'username'
 			},
 			{
-				title: '拥抱量',
+				title: '拥抱',
 				align: "center",
 				dataIndex: 'embrace',
 				key: 'embrace',
@@ -266,7 +266,7 @@ class List extends React.Component {
 			{
 				title: '内容',
 				align: "center",
-				width: "25%",
+				width: "20%",
 				dataIndex: 'content',
 				key: 'content',
 				ellipsis: true,
@@ -352,7 +352,7 @@ class List extends React.Component {
 				key: 'username'
 			},
 			{
-				title: '感谢量',
+				title: '感谢',
 				align: "center",
 				dataIndex: 'thanks',
 				key: 'thanks',
